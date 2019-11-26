@@ -1,0 +1,24 @@
+<div fxFlexFill fxLayout="column">
+  <div>
+    <mat-toolbar color="accent">
+      <span
+        >Status: {{ matchPlayer?.status }} Length:
+        {{ matchPlayer?.wormLength }}</span
+      >
+      <span class="spacer"></span>
+      <button mat-icon-button routerLink="/start-match">
+        <mat-icon>keyboard_arrow_left</mat-icon>
+      </button>
+    </mat-toolbar>
+  </div>
+  <div fxFlex="1 1 100%" fxFlexFill fxLayout="column" #canvascontainer>
+    <canvas
+      #canvas
+      (panleft)="onPanLeft($event)"
+      (panright)="onPanRight($event)"
+      (panup)="onPanUp($event)"
+      (pandown)="onPanDown($event)"
+      >></canvas
+    >
+  </div>
+</div>

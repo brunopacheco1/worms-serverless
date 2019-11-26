@@ -1,0 +1,22 @@
+<div fxFlexFill fxLayout="column">
+  <div>
+    <mat-toolbar color="primary">
+      <span>Worms</span>
+      <span class="spacer"></span>
+      <img *ngIf="isLogged" [src]="userProfileImage" class="user-avatar" />
+      <span></span>
+      <span>{{ username }}</span>
+      <button mat-icon-button *ngIf="isLogged" (click)="logout()">
+        <mat-icon>power_settings_new</mat-icon>
+      </button>
+      <button mat-icon-button *ngIf="!isLogged" (click)="login()">
+        <mat-icon>input</mat-icon>
+      </button>
+    </mat-toolbar>
+  </div>
+  <div fxFlex="1 1 100%">
+    <main fxFlex="1 1 100%">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+</div>
