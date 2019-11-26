@@ -2,8 +2,8 @@
 
 const functions = require("firebase-functions");
 const admin = require("firebase-admin");
-const startMatch = require("./start-match");
+const match = require("./match");
 
 admin.initializeApp(functions.config().firebase);
 
-exports.startMatch = functions.https.onRequest(startMatch);
+exports.match = functions.https.onRequest(match);

@@ -1,0 +1,6 @@
+{
+  "projects": {
+    "prod": "worms-255512",
+    "default": "worms-255512"
+  }
+}
