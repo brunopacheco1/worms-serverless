@@ -10,6 +10,7 @@ module.exports = {
   },
   numberOfPlayers: {
     errorMessage: "Number of players is a int value and it is mandatory.",
-    isInt: true
+    isInt: true,
+    toInt: true
   }
 };
