@@ -52,7 +52,7 @@ app.post("/", checkSchema(matchValidation), (request, response) => {
         newMatch.id = uuid();
         return newMatch;
       } else {
-        let match = newMatch;
+        let match;
         snapshot.forEach(doc => {
           match = doc.data();
         });
