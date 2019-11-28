@@ -4,9 +4,9 @@ const admin = require("firebase-admin");
 const uuid = require("uuid/v1");
 const express = require("express");
 const { checkSchema, validationResult } = require("express-validator");
-const matchValidation = require("./match.validation");
+const matchValidation = require("../model/match.validation");
 const cors = require("cors");
-const defaultMatch = require("./match.model");
+const defaultMatch = require("../model/match.model");
 const { PubSub } = require("@google-cloud/pubsub");
 
 const app = express();
@@ -49,7 +49,7 @@ app.post("/", checkSchema(matchValidation), async (request, response) => {
   }
 
   const newPlayers = new Set(match.players);
-  newPlayers.add(newMatchConfig.playerId);
+  newPlayers.add({ id: newMatchConfig.playerId });
   match.players = Array.from(newPlayers);
 
   if (match.players.length === match.numberOfPlayers) {
@@ -61,7 +61,7 @@ app.post("/", checkSchema(matchValidation), async (request, response) => {
   if (match.status === "RUNNING") {
     const pubsub = new PubSub();
     const dataBuffer = Buffer.from(JSON.stringify(match));
-    await pubsub.topic("match-evaluator").publish(dataBuffer);
+    await pubsub.topic("match-evaluation").publish(dataBuffer);
   }
 
   response.send(match);

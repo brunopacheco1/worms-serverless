@@ -7,5 +7,6 @@ module.exports = {
   playMode: "LONGEST_WORM",
   mapSize: 30,
   status: "WAITING_PLAYERS",
-  players: []
+  players: [],
+  lastMap: null
 };
