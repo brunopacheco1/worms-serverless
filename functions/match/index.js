@@ -1,5 +1,6 @@
 "use strict";
 
+const MatchStatus = require("../model/match-status.enum");
 const admin = require("firebase-admin");
 const uuid = require("uuid/v1");
 const express = require("express");
@@ -34,7 +35,7 @@ app.post("/", checkSchema(matchValidation), async (request, response) => {
 
   const resultList = await collection
     .where("numberOfPlayers", "==", newMatchConfig.numberOfPlayers)
-    .where("status", "==", "WAITING_PLAYERS")
+    .where("status", "==", MatchStatus.WAITING_PLAYERS)
     .limit(1)
     .get();
 
@@ -53,12 +54,12 @@ app.post("/", checkSchema(matchValidation), async (request, response) => {
   match.players = Array.from(newPlayers);
 
   if (match.players.length === match.numberOfPlayers) {
-    match.status = "RUNNING";
+    match.status = MatchStatus.RUNNING;
   }
 
   await collection.doc(match.id).set(match);
 
-  if (match.status === "RUNNING") {
+  if (match.status === MatchStatus.RUNNING) {
     const pubsub = new PubSub();
     const dataBuffer = Buffer.from(JSON.stringify(match));
     await pubsub.topic("match-evaluation").publish(dataBuffer);

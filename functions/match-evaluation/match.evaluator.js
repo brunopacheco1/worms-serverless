@@ -1,5 +1,11 @@
-const initializer = require("./initializer.evaluator");
+"use strict";
 
-const evaluator = initializer();
+const initializerEvaluator = require("./initializer.evaluator");
+const directionEvaluator = require("./direction.evaluator");
+const playerStatusEvaluator = require("./player-position.evaluator");
+
+const evaluator = initializerEvaluator(
+  directionEvaluator(playerStatusEvaluator())
+);
 
 module.exports = evaluator;

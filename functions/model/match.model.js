@@ -1,12 +1,18 @@
 "use strict";
 
+const Difficulty = require("./difficulty.enum");
+const Wall = require("./wall.enum");
+const OpponentBody = require("./opponent-body.enum");
+const PlayMode = require("./play-mode.enum");
+const MatchStatus = require("./match-status.enum");
+
 module.exports = {
-  wall: "SOLID",
-  opponentBody: "SOLID",
-  difficulty: "HARD",
-  playMode: "LONGEST_WORM",
+  wall: Wall.SOLID,
+  opponentBody: OpponentBody.SOLID,
+  difficulty: Difficulty.HARD,
+  playMode: PlayMode.LONGEST_WORM,
   mapSize: 30,
-  status: "WAITING_PLAYERS",
+  status: MatchStatus.WAITING_PLAYERS,
   players: [],
   lastMap: null
 };

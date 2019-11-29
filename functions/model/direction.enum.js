@@ -4,8 +4,8 @@ module.exports = {
   LEFT: "LEFT",
   RIGHT: "RIGHT",
 
-  isOpposite: otherDirection => {
-    switch (otherDirection) {
+  areOpposite: (direction, otherDirection) => {
+    switch (direction) {
       case this.LEFT:
         return otherDirection === this.RIGHT;
       case this.RIGHT:

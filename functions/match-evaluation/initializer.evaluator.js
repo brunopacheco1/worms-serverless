@@ -1,11 +1,13 @@
+"use strict";
+
 const Direction = require("../model/direction.enum");
+const PlayerStatus = require("../model/player-status.enum");
 
 module.exports = next => {
   return (match, lastMap, currentMap) => {
     if (lastMap == null) {
       currentMap.foodPosition = [
-        Math.round(match.mapSize / 2),
-        Math.round(match.mapSize / 2)
+        { x: Math.round(match.mapSize / 2), y: Math.round(match.mapSize / 2) }
       ];
       currentMap.roundCounter = 1;
       currentMap.players.forEach((player, index) => {
@@ -19,6 +21,7 @@ module.exports = next => {
           match.mapSize
         );
         player.wormLength = 2;
+        player.status = PlayerStatus.PLAYING;
       });
     } else {
       currentMap.foodPosition = lastMap.foodPosition;
@@ -45,23 +48,23 @@ const calculateInitialPosition = (direction, size) => {
   switch (direction) {
     case Direction.UP:
       return [
-        [0, 0],
-        [0, 1]
+        { x: 0, y: 0 },
+        { x: 0, y: 1 }
       ];
     case Direction.RIGHT:
       return [
-        [0, size - 1],
-        [1, size - 1]
+        { x: 0, y: size - 1 },
+        { x: 1, y: size - 1 }
       ];
     case Direction.DOWN:
       return [
-        [size - 1, size - 1],
-        [size - 1, size - 2]
+        { x: size - 1, y: size - 1 },
+        { x: size - 1, y: size - 2 }
       ];
     case Direction.LEFT:
       return [
-        [size - 1, 0],
-        [size - 2, 0]
+        { x: size - 1, y: 0 },
+        { x: size - 2, y: 0 }
       ];
   }
 };
