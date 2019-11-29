@@ -17,14 +17,13 @@ module.exports = async message => {
     };
     evaluator(match, match.lastMap, currentMap);
     match.lastMap = currentMap;
-    const matchStr = JSON.stringify(match);
-    console.log(matchStr);
+
     await collection.doc(match.id).set(match);
 
     if (match.status === MatchStatus.RUNNING) {
       await sleep(Difficulty.getTickRate(match.difficulty));
       const pubsub = new PubSub();
-      const dataBuffer = Buffer.from(matchStr);
+      const dataBuffer = Buffer.from(JSON.stringify(match));
       await pubsub.topic("match-evaluation").publish(dataBuffer);
     }
   } catch (e) {
