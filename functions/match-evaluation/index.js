@@ -3,7 +3,7 @@
 const admin = require("firebase-admin");
 const MatchStatus = require("../model/match-status.enum");
 const Difficulty = require("../model/difficulty.enum");
-const evaluator = require("./match.evaluator");
+const evaluatorFactory = require("./match.evaluator-factory");
 const { PubSub } = require("@google-cloud/pubsub");
 
 module.exports = async message => {
@@ -15,15 +15,20 @@ module.exports = async message => {
         return { ...player };
       })
     };
+    const evaluator = evaluatorFactory(match);
+
     evaluator(match, match.lastMap, currentMap);
     match.lastMap = currentMap;
 
     await collection.doc(match.id).set(match);
 
+    console.log(JSON.stringify(match));
+
     if (match.status === MatchStatus.RUNNING) {
       await sleep(Difficulty.getTickRate(match.difficulty));
       const pubsub = new PubSub();
       const dataBuffer = Buffer.from(JSON.stringify(match));
+
       await pubsub.topic("match-evaluation").publish(dataBuffer);
     }
   } catch (e) {
