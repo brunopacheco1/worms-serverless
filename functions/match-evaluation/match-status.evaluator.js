@@ -10,6 +10,7 @@ module.exports = next => {
         .length === 0
     ) {
       currentMap.status = MatchStatus.FINISHED;
+      match.status = MatchStatus.FINISHED;
     }
 
     if (next) {
