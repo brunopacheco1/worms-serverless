@@ -6,9 +6,10 @@ const PlayerStatus = require("../model/player-status.enum");
 module.exports = next => {
   return (match, lastMap, currentMap) => {
     if (lastMap === null) {
-      currentMap.foodPosition = [
-        { x: Math.round(match.mapSize / 2), y: Math.round(match.mapSize / 2) }
-      ];
+      currentMap.foodPosition = {
+        x: Math.round(match.mapSize / 2),
+        y: Math.round(match.mapSize / 2)
+      };
       currentMap.roundCounter = 1;
       currentMap.players.forEach((player, index) => {
         player.direction = calculateInitialDirection(

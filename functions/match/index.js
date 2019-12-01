@@ -32,7 +32,7 @@ app.post("/", checkSchema(matchValidation), async (request, response) => {
       return response.send(validation.errors);
     }
 
-    const newMatchConfig = request.body;
+    const newMatchConfig = request.body.data;
 
     const resultList = await collection
       .where("numberOfPlayers", "==", newMatchConfig.numberOfPlayers)
@@ -64,7 +64,7 @@ app.post("/", checkSchema(matchValidation), async (request, response) => {
       await pubsub.topic("match-evaluation").publish(dataBuffer);
     }
 
-    response.send(match);
+    response.send({ data: match });
   } catch (e) {
     response.status(500).send({ message: "Unknown error" });
   }
