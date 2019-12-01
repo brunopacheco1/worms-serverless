@@ -15,5 +15,6 @@ module.exports = {
       case this.DOWN:
         return otherDirection === this.UP;
     }
+    return null;
   }
 };

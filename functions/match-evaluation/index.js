@@ -11,9 +11,7 @@ module.exports = async message => {
     const collection = admin.firestore().collection("match");
     const match = message.json;
     const currentMap = {
-      players: match.players.map(player => {
-        return { ...player };
-      })
+      players: match.players
     };
     const evaluator = evaluatorFactory(match);
 

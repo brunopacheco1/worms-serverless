@@ -5,12 +5,13 @@ module.exports = {
 
   getTickRate: difficulty => {
     switch (difficulty) {
-      case this.EASY:
-        return 1000;
       case this.MEDIUM:
         return 500;
       case this.HARD:
         return 250;
+      case this.EASY:
+      default:
+        return 1000;
     }
   }
 };

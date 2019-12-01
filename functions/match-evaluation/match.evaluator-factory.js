@@ -29,19 +29,21 @@ module.exports = match => {
 
 const wallEvaluator = (wall, next) => {
   switch (wall) {
-    case Wall.SOLID:
-      return solidWallEvaluator(next);
     case Wall.MIRROR:
       return mirrorWallEvaluator(next);
+    case Wall.SOLID:
+    default:
+      return solidWallEvaluator(next);
   }
 };
 
 const playModeEvaluator = (playMode, next) => {
   switch (playMode) {
-    case PlayMode.LONGEST_WORM:
-      return longestWormModeEvaluator(next);
     case PlayMode.SURVIVAL:
       return survivalModeEvaluator(next);
+    case PlayMode.LONGEST_WORM:
+    default:
+      return longestWormModeEvaluator(next);
   }
 };
 
@@ -50,6 +52,7 @@ const opponentBodyEvaluator = (opponentBody, next) => {
     case OpponentBody.GHOST:
       return ghostOpponentEvaluator(next);
     case OpponentBody.SOLID:
+    default:
       return solidOpponentEvaluator(next);
   }
 };

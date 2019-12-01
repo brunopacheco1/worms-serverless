@@ -5,9 +5,9 @@ const PlayerStatus = require("../model/player-status.enum");
 
 module.exports = next => {
   return (match, lastMap, currentMap) => {
-    if (lastMap != null) {
+    if (lastMap !== null) {
       currentMap.players
-        .filter(p => p.status == PlayerStatus.PLAYING)
+        .filter(p => p.status === PlayerStatus.PLAYING)
         .forEach(currentState => {
           const lastState = lastMap.players.find(p => p.id === currentState.id);
 
@@ -17,7 +17,10 @@ module.exports = next => {
           );
 
           let startIndex = 1;
-          if (newPoint == currentMap.foodPosition) {
+          if (
+            newPoint.x === currentMap.foodPosition.x &&
+            newPoint.y === currentMap.foodPosition.y
+          ) {
             startIndex = 0;
           }
 
@@ -46,4 +49,5 @@ const getNewLastPoint = (lastPoint, direction) => {
     case Direction.LEFT:
       return { x: lastPoint.x - 1, y: lastPoint.y };
   }
+  return null;
 };

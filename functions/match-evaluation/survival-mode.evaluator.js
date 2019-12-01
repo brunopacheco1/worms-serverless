@@ -5,7 +5,7 @@ const PlayerStatus = require("../model/player-status.enum");
 
 module.exports = next => {
   return (match, lastMap, currentMap) => {
-    if (lastMap != null && currentMap.status === MatchStatus.FINISHED) {
+    if (lastMap && currentMap.status === MatchStatus.FINISHED) {
       const alivedPlayers = lastMap.players.filter(
         p => p.status === PlayerStatus.PLAYING
       );

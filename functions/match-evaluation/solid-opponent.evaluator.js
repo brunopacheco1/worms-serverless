@@ -5,7 +5,7 @@ const PlayerStatus = require("../model/player-status.enum");
 module.exports = next => {
   return (match, lastMap, currentMap) => {
     const stillPlaying = currentMap.players.filter(
-      p => p.status == PlayerStatus.PLAYING
+      p => p.status === PlayerStatus.PLAYING
     );
 
     stillPlaying.forEach(player => {
@@ -13,7 +13,7 @@ module.exports = next => {
 
       const allOtherPoints = stillPlaying
         .map(p => {
-          if (p.id == player.id) {
+          if (p.id === player.id) {
             return p.position.slice(0, p.position.length - 1);
           } else {
             return p.position;

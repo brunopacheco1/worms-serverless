@@ -5,7 +5,7 @@ const PlayerStatus = require("../model/player-status.enum");
 module.exports = next => {
   return (match, lastMap, currentMap) => {
     const stillPlaying = currentMap.players.filter(p => {
-      p.status == PlayerStatus.PLAYING;
+      p.status === PlayerStatus.PLAYING;
     });
 
     const food = currentMap.foodPosition;
@@ -30,7 +30,8 @@ const getFoodPosition = (match, players) => {
   const allOccupiedPoints = players.flatMap(p => p.position);
 
   let newFood = null;
-  while (true) {
+  let notFound = true;
+  while (notFound) {
     newFood = {
       x: Math.floor(Math.random() * match.mapSize),
       y: Math.floor(Math.random() * match.mapSize)
@@ -41,7 +42,7 @@ const getFoodPosition = (match, players) => {
         point => point.x === newFood.x && point.y === newFood.y
       ).length === 0
     ) {
-      break;
+      notFound = false;
     }
   }
 
