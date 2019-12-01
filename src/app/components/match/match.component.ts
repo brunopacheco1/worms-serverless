@@ -61,8 +61,9 @@ export class MatchComponent implements OnInit, OnDestroy {
     this.clearMap(true);
     this.mapSubscription = this.matchService
       .getMatchMapEvent(this.match.id)
-      .subscribe(map => {
-        this.updateMap(map);
+      .subscribe(match => {
+        console.log(match);
+        this.updateMap(match.lastMap);
       });
   }
 
@@ -90,14 +91,14 @@ export class MatchComponent implements OnInit, OnDestroy {
 
   private updateMap(map: MatchMap) {
     this.matchPlayer = map.players.find(
-      player => player.playerId === this.loggedPlayer.uid
+      player => player.id === this.loggedPlayer.uid
     );
 
     this.clearMap(false);
 
     map.players.forEach(player => {
       let color = "yellow";
-      if (player.playerId === this.loggedPlayer.uid) {
+      if (player.id === this.loggedPlayer.uid) {
         color = "purple";
       }
       if (player.status !== MatchPlayerStatus.DEAD) {

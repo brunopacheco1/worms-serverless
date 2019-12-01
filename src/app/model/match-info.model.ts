@@ -4,9 +4,10 @@ import { Wall } from "./wall.enum";
 import { OpponentBody } from "./opponent-body.enum";
 import { Difficulty } from "./difficulty.enum";
 import { PlayMode } from "./play-mode.enum";
+import { MatchMap } from "./ match-map.model";
 
 export interface MatchInfo {
-  id: number;
+  id: string;
   status: MatchStatus;
   wall: Wall;
   opponentBody: OpponentBody;
@@ -15,4 +16,5 @@ export interface MatchInfo {
   numberOfPlayers: number;
   mapSize: number;
   players: MatchPlayerInfo[];
+  lastMap: MatchMap;
 }

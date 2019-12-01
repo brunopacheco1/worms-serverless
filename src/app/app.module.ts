@@ -4,6 +4,7 @@ import { NgModule } from "@angular/core";
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { AngularFireFunctionsModule } from "@angular/fire/functions";
 import {
   MatInputModule,
   MatCardModule,
@@ -46,7 +47,8 @@ import { AngularFirestoreModule } from "@angular/fire/firestore";
     MatIconModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireAuthModule,
-    AngularFirestoreModule.enablePersistence()
+    AngularFirestoreModule.enablePersistence(),
+    AngularFireFunctionsModule
   ],
   exports: [],
   providers: [],

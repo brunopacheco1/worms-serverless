@@ -9,32 +9,27 @@ import { MatchMap } from "../model/ match-map.model";
 import { Direction } from "../model/direction.enum";
 import { PlayerAction } from "../model/player-action.model";
 import { NewRandomMatchPlayer } from "../model/new-random-match-player.model";
+import { AngularFireFunctions } from "@angular/fire/functions";
+import {
+  AngularFirestore,
+  AngularFirestoreCollection
+} from "@angular/fire/firestore";
 
 @Injectable({
   providedIn: "root"
 })
 export class MatchService {
   private static CURRENT_MATCH_FIELD = "CURRENT_MATCH";
+  private readonly collectionName = "match";
+  private collection: AngularFirestoreCollection<MatchInfo>;
 
   constructor(
-    private zone: NgZone,
-    private http: HttpClient,
+    private functions: AngularFireFunctions,
     private router: Router,
-    private authService: AuthService
-  ) {}
-
-  startSingleplayer() {
-    const player = this.authService.getUser();
-    const playerMatch: NewMatchPlayer = { playerId: player.uid };
-    this.http
-      .post<MatchInfo>("/api/v1/match/players", playerMatch)
-      .subscribe(matchInfo => {
-        localStorage.setItem(
-          MatchService.CURRENT_MATCH_FIELD,
-          JSON.stringify(matchInfo)
-        );
-        this.router.navigate(["match"]);
-      });
+    private authService: AuthService,
+    private database: AngularFirestore
+  ) {
+    this.collection = this.database.collection<MatchInfo>(this.collectionName);
   }
 
   startRandomMatch(numberOfPlayers: number) {
@@ -43,38 +38,23 @@ export class MatchService {
       playerId: player.uid,
       numberOfPlayers
     };
-    this.http
-      .post<MatchInfo>("/api/v1/match/players", playerMatch)
-      .subscribe(matchInfo => {
-        localStorage.setItem(
-          MatchService.CURRENT_MATCH_FIELD,
-          JSON.stringify(matchInfo)
-        );
-        this.router.navigate(["match"]);
-      });
+
+    const callable = this.functions.httpsCallable("match");
+    callable(playerMatch).subscribe(matchInfo => {
+      localStorage.setItem(
+        MatchService.CURRENT_MATCH_FIELD,
+        JSON.stringify(matchInfo)
+      );
+      this.router.navigate(["match"]);
+    });
   }
 
   getCurrentMatch(): MatchInfo {
     return JSON.parse(localStorage.getItem(MatchService.CURRENT_MATCH_FIELD));
   }
 
-  getMatchMapEvent(matchId: number): Observable<MatchMap> {
-    return Observable.create(observer => {
-      const eventSource = new EventSource(`/api/v1/match/${matchId}/map`);
-
-      eventSource.onmessage = event => {
-        this.zone.run(() => {
-          observer.next(JSON.parse(event.data));
-        });
-      };
-
-      eventSource.onerror = error => {
-        this.zone.run(() => {
-          observer.error(error);
-          console.log(error);
-        });
-      };
-    });
+  getMatchMapEvent(matchId: string): Observable<MatchInfo> {
+    return this.collection.doc<MatchInfo>(matchId).valueChanges();
   }
 
   updatePlayerDirection(key: string) {
@@ -98,9 +78,9 @@ export class MatchService {
       const player = this.authService.getUser();
       const match = this.getCurrentMatch();
       const playerAction: PlayerAction = { playerId: player.uid, direction };
-      this.http
+      /*this.http
         .put(`/api/v1/match/${match.id}/rounds`, playerAction)
-        .subscribe(matchInfo => {});
+        .subscribe(matchInfo => {});*/
     }
   }
 }
