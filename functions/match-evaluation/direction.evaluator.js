@@ -6,7 +6,7 @@ const PlayerStatus = require("../model/player-status.enum");
 module.exports = next => {
   return (match, lastMap, currentMap) => {
     currentMap.players
-      .filter(p => p.status == PlayerStatus.PLAYING)
+      .filter(p => p.status === PlayerStatus.PLAYING)
       .forEach(mapPlayer => {
         const matchPlayer = match.players.find(p => p.id === mapPlayer.id);
         const newDirection = getDirection(matchPlayer, mapPlayer);

@@ -40,11 +40,11 @@ module.exports = next => {
   };
 };
 
-const calculateInitialDirection = (index, size) => {
-  return Object.keys(Direction)[index % size];
+const calculateInitialDirection = (index, length) => {
+  return Object.keys(Direction)[index % length];
 };
 
-const calculateInitialPosition = (direction, size) => {
+const calculateInitialPosition = (direction, length) => {
   switch (direction) {
     case Direction.UP:
       return [
@@ -53,18 +53,18 @@ const calculateInitialPosition = (direction, size) => {
       ];
     case Direction.RIGHT:
       return [
-        { x: 0, y: size - 1 },
-        { x: 1, y: size - 1 }
+        { x: 0, y: length - 1 },
+        { x: 1, y: length - 1 }
       ];
     case Direction.DOWN:
       return [
-        { x: size - 1, y: size - 1 },
-        { x: size - 1, y: size - 2 }
+        { x: length - 1, y: length - 1 },
+        { x: length - 1, y: length - 2 }
       ];
     case Direction.LEFT:
       return [
-        { x: size - 1, y: 0 },
-        { x: size - 2, y: 0 }
+        { x: length - 1, y: 0 },
+        { x: length - 2, y: 0 }
       ];
   }
 };

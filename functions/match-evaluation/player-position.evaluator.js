@@ -22,7 +22,7 @@ module.exports = next => {
           }
 
           currentState.position = [
-            ...lastState.position.slice(startIndex, lastState.position.size),
+            ...lastState.position.slice(startIndex, lastState.position.length),
             newPoint
           ];
 
