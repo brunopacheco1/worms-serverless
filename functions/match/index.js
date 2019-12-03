@@ -2,7 +2,7 @@
 
 const MatchStatus = require("../model/match-status.enum");
 const admin = require("firebase-admin");
-const uuid = require("uuid/v1");
+const shortid = require("shortid");
 const express = require("express");
 const { checkSchema, validationResult } = require("express-validator");
 const matchValidation = require("../model/match.validation");
@@ -40,17 +40,18 @@ app.post("/", checkSchema(matchValidation), async (request, response) => {
       .limit(1)
       .get();
 
-    let match = defaultMatch;
-    match.id = uuid();
-    match.numberOfPlayers = newMatchConfig.numberOfPlayers;
-
+    let match = null;
     if (!resultList.empty) {
       match = resultList.docs.pop().data();
+    } else {
+      match = Object.assign({}, defaultMatch);
+      match.id = shortid.generate();
+      match.numberOfPlayers = newMatchConfig.numberOfPlayers;
     }
 
-    const newPlayers = new Set(match.players);
-    newPlayers.add({ id: newMatchConfig.playerId });
-    match.players = Array.from(newPlayers);
+    if (!match.players.filter(p => p.id === newMatchConfig.playerId).length) {
+      match.players.push({ id: newMatchConfig.playerId });
+    }
 
     if (match.players.length === match.numberOfPlayers) {
       match.status = MatchStatus.RUNNING;

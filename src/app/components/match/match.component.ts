@@ -90,6 +90,9 @@ export class MatchComponent implements OnInit, OnDestroy {
   }
 
   private updateMap(map: MatchMap) {
+    if (!map) {
+      return;
+    }
     this.matchPlayer = map.players.find(
       player => player.id === this.loggedPlayer.uid
     );

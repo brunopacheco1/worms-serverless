@@ -29,8 +29,6 @@ module.exports = async message => {
 
     await collection.doc(match.id).set(match);
 
-    console.log(JSON.stringify(match));
-
     if (match.status === MatchStatus.RUNNING) {
       await sleep(Difficulty.getTickRate(match.difficulty));
       const pubsub = new PubSub();
