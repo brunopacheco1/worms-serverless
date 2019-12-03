@@ -12,7 +12,7 @@ module.exports = async message => {
     const match = message.json;
     const currentMap = {
       players: match.players.map(p => {
-        return { id: p.id };
+        return { id: p.id, direction: p.direction };
       })
     };
     const evaluator = evaluatorFactory(match);
@@ -20,7 +20,7 @@ module.exports = async message => {
     evaluator(match, match.lastMap, currentMap);
     match.lastMap = currentMap;
     match.players = currentMap.players.map(p => {
-      return { id: p.id, status: p.status };
+      return { id: p.id, status: p.status, direction: p.direction };
     });
 
     if (currentMap.status === MatchStatus.FINISHED) {

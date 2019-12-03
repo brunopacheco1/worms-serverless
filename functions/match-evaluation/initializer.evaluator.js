@@ -32,7 +32,6 @@ module.exports = next => {
         currentPlayer.status = player.status;
         currentPlayer.position = player.position;
         currentPlayer.wormLength = player.wormLength;
-        currentPlayer.direction = player.direction;
       });
     }
     if (next) {
