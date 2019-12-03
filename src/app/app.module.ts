@@ -4,7 +4,10 @@ import { NgModule } from "@angular/core";
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
-import { AngularFireFunctionsModule } from "@angular/fire/functions";
+import {
+  AngularFireFunctionsModule,
+  FUNCTIONS_ORIGIN
+} from "@angular/fire/functions";
 import {
   MatInputModule,
   MatCardModule,
@@ -51,7 +54,9 @@ import { AngularFirestoreModule } from "@angular/fire/firestore";
     AngularFireFunctionsModule
   ],
   exports: [],
-  providers: [],
+  providers: [
+    { provide: FUNCTIONS_ORIGIN, useValue: environment.functionsOrigins }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

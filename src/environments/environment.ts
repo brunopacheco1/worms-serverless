@@ -11,7 +11,8 @@ export const environment = {
     projectId: "worms-255512",
     storageBucket: "worms-255512.appspot.com",
     messagingSenderId: "166457283272"
-  }
+  },
+  functionsOrigins: "http://localhost:5001"
 };
 
 /*
