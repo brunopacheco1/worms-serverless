@@ -18,7 +18,7 @@ const routes: Routes = [
     canActivate: [AuthNotLoggedInService]
   },
   {
-    path: "match",
+    path: "match/:id",
     component: MatchComponent,
     canActivate: [AuthNotLoggedInService]
   }

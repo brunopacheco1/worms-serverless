@@ -45,19 +45,19 @@ export class MatchService {
         MatchService.CURRENT_MATCH_FIELD,
         JSON.stringify(matchInfo)
       );
-      this.router.navigate(["match"]);
+      this.router.navigate([`match/${matchInfo.id}`]);
     });
-  }
-
-  getCurrentMatch(): MatchInfo {
-    return JSON.parse(localStorage.getItem(MatchService.CURRENT_MATCH_FIELD));
   }
 
   getMatchMapEvent(matchId: string): Observable<MatchInfo> {
     return this.collection.doc<MatchInfo>(matchId).valueChanges();
   }
 
-  updatePlayerDirection(key: string) {
+  updatePlayerDirection(key: string, match: MatchInfo) {
+    if (!match) {
+      return;
+    }
+
     let direction = null;
     switch (key) {
       case "ArrowUp":
@@ -76,11 +76,11 @@ export class MatchService {
 
     if (direction) {
       const player = this.authService.getUser();
-      const match = this.getCurrentMatch();
-      const playerAction: PlayerAction = { playerId: player.uid, direction };
-      /*this.http
-        .put(`/api/v1/match/${match.id}/rounds`, playerAction)
-        .subscribe(matchInfo => {});*/
+      const matchPlayer = match.players.find(p => p.id === player.uid);
+      if (matchPlayer) {
+        matchPlayer.direction = direction;
+        this.collection.doc(match.id).update({ players: match.players });
+      }
     }
   }
 }

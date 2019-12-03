@@ -17,6 +17,7 @@ import { MatchMapPlayer } from "src/app/model/match-map-player.model";
 import { MatchPlayerStatus } from "src/app/model/match-player-status.enum";
 import { Direction } from "src/app/model/direction.enum";
 import { User } from "src/app/model/user.model";
+import { ActivatedRoute, Router } from "@angular/router";
 
 @Component({
   selector: "app-match",
@@ -29,7 +30,9 @@ import { User } from "src/app/model/user.model";
 export class MatchComponent implements OnInit, OnDestroy {
   constructor(
     private authService: AuthService,
-    private matchService: MatchService
+    private matchService: MatchService,
+    private route: ActivatedRoute,
+    private router: Router
   ) {}
 
   mapSubscription: Subscription;
@@ -55,16 +58,21 @@ export class MatchComponent implements OnInit, OnDestroy {
       this.canvasContainer.nativeElement.offsetHeight - 64;
     this.canvas.nativeElement.width = this.canvasContainer.nativeElement.offsetWidth;
     this.ctx = this.canvas.nativeElement.getContext("2d");
-    this.match = this.matchService.getCurrentMatch();
     this.loggedPlayer = this.authService.getUser();
-    this.initializeMap();
-    this.clearMap(true);
-    this.mapSubscription = this.matchService
-      .getMatchMapEvent(this.match.id)
-      .subscribe(match => {
-        console.log(match);
-        this.updateMap(match.lastMap);
-      });
+    this.route.paramMap.subscribe(params => {
+      const matchId = params.get("id");
+      this.mapSubscription = this.matchService
+        .getMatchMapEvent(matchId)
+        .subscribe(match => {
+          if (!this.match) {
+            this.match = match;
+            this.initializeMap();
+            this.clearMap(true);
+          }
+          console.log(match);
+          this.updateMap(match.lastMap);
+        });
+    });
   }
 
   ngOnDestroy() {
@@ -73,20 +81,20 @@ export class MatchComponent implements OnInit, OnDestroy {
 
   @HostListener("window:keyup", ["$event"])
   keyEvent(event: KeyboardEvent) {
-    this.matchService.updatePlayerDirection(event.key);
+    this.matchService.updatePlayerDirection(event.key, this.match);
   }
 
   onPanLeft() {
-    this.matchService.updatePlayerDirection("ArrowLeft");
+    this.matchService.updatePlayerDirection("ArrowLeft", this.match);
   }
   onPanRight() {
-    this.matchService.updatePlayerDirection("ArrowRight");
+    this.matchService.updatePlayerDirection("ArrowRight", this.match);
   }
   onPanUp() {
-    this.matchService.updatePlayerDirection("ArrowUp");
+    this.matchService.updatePlayerDirection("ArrowUp", this.match);
   }
   onPanDown() {
-    this.matchService.updatePlayerDirection("ArrowDown");
+    this.matchService.updatePlayerDirection("ArrowDown", this.match);
   }
 
   private updateMap(map: MatchMap) {
