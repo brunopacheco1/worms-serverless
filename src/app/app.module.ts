@@ -6,7 +6,8 @@ import { AppComponent } from "./app.component";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import {
   AngularFireFunctionsModule,
-  FUNCTIONS_ORIGIN
+  FUNCTIONS_ORIGIN,
+  FUNCTIONS_REGION
 } from "@angular/fire/functions";
 import {
   MatInputModule,
@@ -55,7 +56,8 @@ import { AngularFirestoreModule } from "@angular/fire/firestore";
   ],
   exports: [],
   providers: [
-    { provide: FUNCTIONS_ORIGIN, useValue: environment.functionsOrigins }
+    { provide: FUNCTIONS_ORIGIN, useValue: environment.functionsOrigins },
+    { provide: FUNCTIONS_REGION, useValue: "europe-west1" }
   ],
   bootstrap: [AppComponent]
 })
