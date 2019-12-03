@@ -8,8 +8,12 @@ const { PubSub } = require("@google-cloud/pubsub");
 
 module.exports = async message => {
   try {
+    let start = new Date();
     const collection = admin.firestore().collection("match");
-    const match = message.json;
+    const matchConfig = message.json;
+    const matchRef = await collection.doc(matchConfig.id).get();
+    const match = matchRef.data();
+
     const currentMap = {
       players: match.players.map(p => {
         return { id: p.id, direction: p.direction };
@@ -30,9 +34,10 @@ module.exports = async message => {
     await collection.doc(match.id).set(match);
 
     if (match.status === MatchStatus.RUNNING) {
-      await sleep(Difficulty.getTickRate(match.difficulty));
+      let end = new Date() - start;
+      await sleep(Difficulty.getTickRate(match.difficulty) - end);
       const pubsub = new PubSub();
-      const dataBuffer = Buffer.from(JSON.stringify(match));
+      const dataBuffer = Buffer.from(JSON.stringify({ id: match.id }));
 
       await pubsub.topic("match-evaluation").publish(dataBuffer);
     }

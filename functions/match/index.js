@@ -61,7 +61,7 @@ app.post("/", checkSchema(matchValidation), async (request, response) => {
 
     if (match.status === MatchStatus.RUNNING) {
       const pubsub = new PubSub();
-      const dataBuffer = Buffer.from(JSON.stringify(match));
+      const dataBuffer = Buffer.from(JSON.stringify({ id: match.id }));
       await pubsub.topic("match-evaluation").publish(dataBuffer);
     }
 
