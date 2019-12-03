@@ -11,14 +11,25 @@ module.exports = async message => {
     const collection = admin.firestore().collection("match");
     const match = message.json;
     const currentMap = {
-      players: match.players
+      players: match.players.map(p => {
+        return { id: p.id };
+      })
     };
     const evaluator = evaluatorFactory(match);
 
     evaluator(match, match.lastMap, currentMap);
     match.lastMap = currentMap;
+    match.players = currentMap.players.map(p => {
+      return { id: p.id, status: p.status };
+    });
+
+    if (currentMap.status === MatchStatus.FINISHED) {
+      match.status = currentMap.status;
+    }
 
     await collection.doc(match.id).set(match);
+
+    console.log(JSON.stringify(match));
 
     if (match.status === MatchStatus.RUNNING) {
       await sleep(Difficulty.getTickRate(match.difficulty));
