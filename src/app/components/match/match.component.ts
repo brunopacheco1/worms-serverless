@@ -10,19 +10,16 @@ import { AuthService } from "src/app/services/auth.service";
 import { MatchService } from "src/app/services/match.service";
 import { Subscription } from "rxjs";
 import { MatchInfo } from "src/app/model/match-info.model";
-import { MapPoint } from "src/app/model/map-point.model";
 import { MatchMap } from "src/app/model/ match-map.model";
-import { PlayerInfo } from "src/app/model/player-info.model";
 import { MatchMapPlayer } from "src/app/model/match-map-player.model";
 import { MatchPlayerStatus } from "src/app/model/match-player-status.enum";
-import { Direction } from "src/app/model/direction.enum";
 import { User } from "src/app/model/user.model";
 import { ActivatedRoute, Router } from "@angular/router";
 
 @Component({
   selector: "app-match",
   host: {
-    "(document:keypress)": "handleKeyboardEvent($event)"
+    "(document:keypress)": "keyEvent($event)"
   },
   templateUrl: "./match.component.html",
   styleUrls: ["./match.component.scss"]
@@ -64,11 +61,9 @@ export class MatchComponent implements OnInit, OnDestroy {
       this.mapSubscription = this.matchService
         .getMatchMapEvent(matchId)
         .subscribe(match => {
-          if (!this.match) {
-            this.match = match;
-            this.initializeMap();
-            this.clearMap(true);
-          }
+          this.match = match;
+          this.initializeMap();
+          this.clearMap(true);
           console.log(match);
           this.updateMap(match.lastMap);
         });
@@ -84,16 +79,16 @@ export class MatchComponent implements OnInit, OnDestroy {
     this.matchService.updatePlayerDirection(event.key, this.match);
   }
 
-  onPanLeft() {
+  onPanLeft(event) {
     this.matchService.updatePlayerDirection("ArrowLeft", this.match);
   }
-  onPanRight() {
+  onPanRight(event) {
     this.matchService.updatePlayerDirection("ArrowRight", this.match);
   }
-  onPanUp() {
+  onPanUp(event) {
     this.matchService.updatePlayerDirection("ArrowUp", this.match);
   }
-  onPanDown() {
+  onPanDown(event) {
     this.matchService.updatePlayerDirection("ArrowDown", this.match);
   }
 
