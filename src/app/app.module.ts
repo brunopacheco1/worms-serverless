@@ -55,10 +55,7 @@ import { AngularFirestoreModule } from "@angular/fire/firestore";
     AngularFireFunctionsModule
   ],
   exports: [],
-  providers: [
-    { provide: FUNCTIONS_ORIGIN, useValue: environment.functionsOrigins },
-    { provide: FUNCTIONS_REGION, useValue: "europe-west1" }
-  ],
+  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

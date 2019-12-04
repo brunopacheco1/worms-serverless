@@ -12,7 +12,7 @@ module.exports = next => {
 
     const playersLastPointIsEqualFoodPoint =
       stillPlaying
-        .map(p => p.position[p.position - 1])
+        .map(p => p.position[p.position.length - 1])
         .filter(lastPoint => lastPoint.x === food.x && lastPoint.y === food.y)
         .length > 0;
 
@@ -27,7 +27,9 @@ module.exports = next => {
 };
 
 const getFoodPosition = (match, players) => {
-  const allOccupiedPoints = players.flatMap(p => p.position);
+  const allOccupiedPoints = players
+    .map(p => p.position)
+    .reduce((x, y) => x.concat(y), []);
 
   let newFood = null;
   let notFound = true;
